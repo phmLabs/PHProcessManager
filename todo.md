@@ -2,4 +2,5 @@
 
 - Restart on Crash
 - Don't restart broken commands
-- memory use
+- memory usage
+- log file per process
