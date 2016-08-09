@@ -1,0 +1,17 @@
+{
+  "name": "phmlabs/proecessmanager",
+  "description": "Lorem Ipsum",
+  "require": {
+    "php": ">= 5.4.0",
+    "cilex/cilex": "dev-master",
+    "zendframework/zend-text": "~2.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "phmLabs\\ProcessManager\\": "src/"
+    }
+  },
+  "bin": [
+    "bin/Smoke.php"
+  ]
+}
