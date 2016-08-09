@@ -21,7 +21,7 @@ class Manager
             if (is_null($name)) {
                 $name = $pid;
             }
-            $this->processes[$name] = ['pid' => $pid, 'command' => $command, 'start' => date('Y-m-d H:m:i'), 'restartCount' => $restartCount];
+            $this->processes[$name] = ['pid' => $pid, 'command' => $command, 'start' => date('Y-m-d H:i:s'), 'restartCount' => $restartCount];
             return $pid;
         }
 
@@ -56,7 +56,6 @@ class Manager
 
         return true;
     }
-
 
     public function restartDiedProcesses()
     {

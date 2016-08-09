@@ -18,11 +18,18 @@ class Daemon
     private $manager;
     private $stopRunning = false;
     private $interval = 500000;
+    private $exportFile = '/tmp/phpm.lock';
 
-    public function __construct(Queue $queue, Manager $manager)
+    public function __construct(Queue $queue, Manager $manager, $exportFile = null)
     {
         $this->queue = $queue;
         $this->manager = $manager;
+
+        if ($exportFile) {
+            $this->exportFile = $exportFile;
+        }
+
+        $this->importProcessList();
     }
 
     public function run()
@@ -49,6 +56,22 @@ class Daemon
         $this->manager->killProcesses();
     }
 
+    private function exportProcessList()
+    {
+        $processes = $this->manager->getProcesses();
+        file_put_contents($this->exportFile, json_encode($processes, 10));
+    }
+
+    private function importProcessList()
+    {
+        if (file_exists($this->exportFile)) {
+            $processes = json_decode(file_get_contents($this->exportFile), true);
+            foreach ($processes as $name => $process) {
+                $this->manager->start($process['command'], $name);
+            }
+        }
+    }
+
     private function handleMessage(Message $message, $identifier)
     {
         if ($message instanceof Start) {
@@ -59,12 +82,14 @@ class Daemon
             } catch (\Exception $e) {
                 $this->sendResponse(Response::STATUS_FAILURE, $e->getMessage(), $identifier);
             }
+            $this->exportProcessList();
         } elseif ($message instanceof Info) {
             $processes = $this->manager->getProcesses();
             $this->sendResponse(Response::STATUS_SUCCESS, $processes, $identifier);
         } elseif ($message instanceof Stop) {
             $this->manager->stop($message->getPid());
             $this->sendResponse(Response::STATUS_SUCCESS, 'Process stopped successfully.', $identifier);
+            $this->exportProcessList();
         } elseif ($message instanceof Discover) {
             $this->sendResponse(Response::STATUS_SUCCESS, true, $identifier);
         } elseif ($message instanceof Kill) {
