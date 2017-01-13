@@ -1,0 +1,9 @@
+{
+   "LeanKoala Worker":{
+      "instances": 7,
+      "pid":"",
+      "command":"\/usr\/bin\/php \/var\/tools\/koalaqueue\/bin\/pop.php \/opt\/LeanKoalaConfig\/queue.config koalamon",
+      "start":"2016-09-12 23:46:52",
+      "restartCount":-1
+   }
+}

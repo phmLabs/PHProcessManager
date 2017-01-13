@@ -21,40 +21,64 @@ class Manager
             if (is_null($name)) {
                 $name = $pid;
             }
-            $this->processes[$name] = ['pid' => $pid, 'command' => $command, 'start' => date('Y-m-d H:i:s'), 'restartCount' => $restartCount];
+            $this->processes[$name] = [
+                'name' => $name,
+                'pid' => $pid,
+                'command' => $command,
+                'start' => date('Y-m-d H:i:s'),
+                'restartCount' => $restartCount
+            ];
+
             return $pid;
         }
 
         return false;
     }
 
-    public function stop($pid = null, $name = null)
+    private function nameExists($name)
     {
-        if (!$name and !$pid) {
-            throw new ProcessException("Process pid and name not set. At least one of them must be set.");
-        }
-
-        if ($name) {
-            if (array_key_exists($name, $this->processes)) {
-                $pid = $this->processes[$name];
-            } else {
-                throw new ProcessException("Process name was not found.");
+        foreach ($this->processes as $process) {
+            if ($process['name'] == $name) {
+                return true;
             }
         }
+        return false;
+    }
 
-        if ($pid) {
-            foreach ($this->processes as $processName => $process) {
-                if ($process['pid'] == $pid) {
-                    $name = $processName;
+    public function stop($pid)
+    {
+        if (array_key_exists($pid, $this->processes)) {
+            exec('kill ' . $pid);
+            unset($this->processes[$pid]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function cloneProcess($pid)
+    {
+        if (array_key_exists($pid, $this->processes)) {
+            $count = 2;
+
+            $name = preg_replace("^ \([0-9]*\)^", '', $this->processes[$pid]['name']);
+
+            if ($name != "") {
+                while ($this->nameExists($name . " (" . $count . ")")) {
+                    $count++;
                 }
+                $newName = $name . " (" . $count . ")";
+            } else {
+                $newName = "";
             }
+
+            return $this->start(
+                $this->processes[$pid]['command'],
+                $newName,
+                0);
+        } else {
+            throw new ProcessException("Process ID (pid) not found");
         }
-
-        exec('kill ' . $pid);
-
-        unset($this->processes[$name]);
-
-        return true;
     }
 
     public function restartDiedProcesses()

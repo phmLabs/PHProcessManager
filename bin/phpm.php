@@ -12,5 +12,6 @@ $app->command(new \phmLabs\ProcessManager\Cli\Command\KillCommand());
 $app->command(new \phmLabs\ProcessManager\Cli\Command\StartCommand());
 $app->command(new \phmLabs\ProcessManager\Cli\Command\StopCommand());
 $app->command(new \phmLabs\ProcessManager\Cli\Command\InfoCommand());
+$app->command(new \phmLabs\ProcessManager\Cli\Command\CloneCommand());
 
 $app->run();

@@ -26,7 +26,7 @@ class InfoCommand extends PhpmCommand
         $message = new Info();
         $response = $this->queue->sendMessage($message, true);
 
-        $processes = $response->getMessage();
+        $processes = json_decode($response->getMessage(), true);
 
         if (!is_array($processes)) {
             $output->writeln("\n  " . $processes . "\n\n");
@@ -34,9 +34,11 @@ class InfoCommand extends PhpmCommand
             $table = new Table(['padding' => 1, 'columnWidths' => [15, 7, 60, 9, 21]]);
             $table->appendRow(['app name', 'pid', 'command', 'restart', 'started']);
 
-            foreach ($response->getMessage() as $name => $row) {
-                if ($name == $row['pid']) {
+            foreach ($processes as $name => $row) {
+                if ($row['name'] == $row['pid']) {
                     $name = "<none>";
+                } else {
+                    $name = $row['name'];
                 }
 
                 $table->appendRow([

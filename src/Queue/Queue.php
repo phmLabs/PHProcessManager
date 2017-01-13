@@ -31,7 +31,7 @@ class Queue
 
         $msg_type = NULL;
         $msg = NULL;
-        $max_msg_size = 100000;
+        $max_msg_size = 1000000;
 
         if (msg_receive($queue, 1, $msg_type, $max_msg_size, $msg, true, MSG_IPC_NOWAIT)) {
             if ($removeQueue && $identifier) {
@@ -73,6 +73,7 @@ class Queue
         $messageContainer = ['identifier' => $identifier, 'message' => $message];
 
         $queue = $this->getQueue($queueIdentifier);
+
         msg_send($queue, 1, $messageContainer);
 
         if ($awaitsResponse) {

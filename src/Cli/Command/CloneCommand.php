@@ -2,31 +2,28 @@
 
 namespace phmLabs\ProcessManager\Cli\Command;
 
-use phmLabs\ProcessManager\Message\Command\Stop;
+use phmLabs\ProcessManager\Message\Command\CloneCommand as cCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StopCommand extends PhpmCommand
+class CloneCommand extends PhpmCommand
 {
     protected function configure()
     {
         $this
-            ->setName('stop')
-            ->setDescription('Stop a process')
-            ->addArgument('pid', InputArgument::REQUIRED, 'The process id (PID).');
+            ->setName('clone')
+            ->setDescription('Clone an existing process')
+            ->addArgument('pid', InputArgument::REQUIRED, 'The process pid to clone');
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initQueue();
         $this->assertDaemonRunning($output);
 
-        $message = new Stop($input->getArgument('pid'));
+        $message = new cCommand($input->getArgument('pid'));
 
-        $response = $this->queue->sendMessage($message, true);
-
-        $this->renderResponse($response, $output);
+        $this->renderResponse($this->queue->sendMessage($message, true), $output);
     }
 }
