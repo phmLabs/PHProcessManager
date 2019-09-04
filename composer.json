@@ -12,6 +12,6 @@
     }
   },
   "bin": [
-    "bin/Smoke.php"
+    "bin/phpm.php"
   ]
 }
