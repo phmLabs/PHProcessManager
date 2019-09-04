@@ -110,7 +110,13 @@ class Daemon
     private function importProcessList()
     {
         if (file_exists($this->exportFile)) {
+
             $processes = json_decode(file_get_contents($this->exportFile), true);
+
+            if (!$processes) {
+                throw new \RuntimeException('Seems like the given config file is invalid (' . $this->exportFile . ').');
+            }
+
             foreach ($processes as $name => $process) {
                 $instanceCount = $this->getInstanceCount($process);
                 for ($i = 0; $i < $instanceCount; $i++) {
