@@ -2,9 +2,9 @@
   "name": "phmlabs/proecessmanager",
   "description": "Lorem Ipsum",
   "require": {
-    "php": ">= 5.4.0",
+    "php": ">= 8.0",
     "cilex/cilex": "dev-master",
-    "zendframework/zend-text": "~2.6"
+    "laminas/laminas-text": "~2.10.0"
   },
   "autoload": {
     "psr-4": {

@@ -3,7 +3,6 @@
 namespace phmLabs\ProcessManager\Cli\Command;
 
 use phmLabs\ProcessManager\Message\Command\Info;
-use phmLabs\ProcessManager\Process\Manager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zend\Text\Table\Table;
@@ -16,7 +15,6 @@ class InfoCommand extends PhpmCommand
             ->setName('info')
             ->setDescription('Show all running processes');
     }
-
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
