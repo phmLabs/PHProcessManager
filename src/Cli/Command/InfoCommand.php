@@ -2,10 +2,10 @@
 
 namespace phmLabs\ProcessManager\Cli\Command;
 
+use Laminas\Text\Table\Table;
 use phmLabs\ProcessManager\Message\Command\Info;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zend\Text\Table\Table;
 
 class InfoCommand extends PhpmCommand
 {
